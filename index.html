@@ -113,27 +113,103 @@
 
         <!-- STEP 3: REQUIREMENTS -->
         <section id="step-3" class="hidden-step glass-panel rounded-2xl p-10 transition-all duration-300">
-            <h2 class="font-mono text-2xl mb-6 border-b border-borderGray pb-4">02. DIMENSIONS & MATERIAL</h2>
+            <h2 class="font-mono text-2xl mb-6 border-b border-borderGray pb-4">02. SECTOR SPECIFICATIONS</h2>
             <form id="requirements-form" class="space-y-6">
-                <div class="grid grid-cols-3 gap-4">
-                    <div>
-                        <label class="block font-mono text-sm text-gray-400 mb-2">LENGTH (IN)</label>
-                        <input type="number" id="input-length" required min="1"
-                            class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all">
-                    </div>
-                    <div>
-                        <label class="block font-mono text-sm text-gray-400 mb-2">WIDTH (IN)</label>
-                        <input type="number" id="input-width" required min="1"
-                            class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all">
-                    </div>
-                    <div>
-                        <label class="block font-mono text-sm text-gray-400 mb-2">THICKNESS (IN)</label>
-                        <input type="number" step="0.1" id="input-thickness" required min="0.1"
-                            class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all">
+
+                <div id="form-heavy" class="dynamic-form hidden space-y-4">
+                    <h3 class="font-mono text-nothing text-sm border-l-2 border-nothing pl-2">I-BEAM / H-PILE PARAMETERS
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">LENGTH (FT)</label>
+                            <input type="number" id="hs-length" min="1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">WEB DEPTH (IN)</label>
+                            <input type="number" id="hs-depth" min="1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">FLANGE (IN)</label>
+                            <input type="number" id="hs-flange" min="1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">THICKNESS (IN)</label>
+                            <input type="number" step="0.1" id="hs-thick" min="0.1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <label class="block font-mono text-sm text-gray-400 mb-2">MATERIAL GRADE</label>
+
+                <div id="form-piping" class="dynamic-form hidden space-y-4">
+                    <h3 class="font-mono text-nothing text-sm border-l-2 border-nothing pl-2">PIPING & TUBING PARAMETERS
+                    </h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">RUN LENGTH (FT)</label>
+                            <input type="number" id="pipe-length" min="1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">OUTER DIAMETER (IN)</label>
+                            <input type="number" step="0.1" id="pipe-od" min="0.5"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">WALL THICKNESS (IN)</label>
+                            <input type="number" step="0.01" id="pipe-wall" min="0.05"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-res" class="dynamic-form hidden space-y-4">
+                    <h3 class="font-mono text-nothing text-sm border-l-2 border-nothing pl-2">SHEET METAL / HVAC
+                        PARAMETERS</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">TOTAL AREA (SQ FT)</label>
+                            <input type="number" id="res-area" min="1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">GAUGE (DECIMAL IN)</label>
+                            <select id="res-gauge"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none appearance-none">
+                                <option value="0.0598">16 Gauge (0.0598")</option>
+                                <option value="0.0478">18 Gauge (0.0478")</option>
+                                <option value="0.0239">24 Gauge (0.0239")</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="form-agri" class="dynamic-form hidden space-y-4">
+                    <h3 class="font-mono text-nothing text-sm border-l-2 border-nothing pl-2">CORRUGATED / FENCING
+                        PARAMETERS</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">LINEAR RUN (FT)</label>
+                            <input type="number" id="agri-length" min="1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">HEIGHT (FT)</label>
+                            <input type="number" id="agri-height" min="1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-2">POST SPACING (FT)</label>
+                            <input type="number" id="agri-spacing" min="1"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white focus:border-nothing outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-borderGray">
+                    <label class="block font-mono text-sm text-gray-400 mb-2">MATERIAL GRADE ALLOCATION</label>
                     <select id="input-material" required
                         class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all appearance-none">
                         <option value="A36_Carbon">A36 Carbon Steel</option>
@@ -141,6 +217,7 @@
                         <option value="6061_Aluminum">6061-T6 Aluminum</option>
                     </select>
                 </div>
+
                 <div class="pt-4 text-right">
                     <button type="submit"
                         class="font-mono px-6 py-2 bg-white text-black hover:bg-nothing hover:text-white rounded transition-colors">NEXT:
@@ -230,34 +307,63 @@
                 <span class="font-mono text-xs text-gray-500 animate-pulse">● LIVE SYNC ACTIVE</span>
             </div>
 
-            <form id="admin-form" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-mono text-xs text-gray-400 mb-1">MARKET RATE ($/cu in)</label>
-                        <input type="number" step="0.01" id="admin-market"
-                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
-                    </div>
-                    <div>
-                        <label class="block font-mono text-xs text-gray-400 mb-1">LABOR COST ($/unit)</label>
-                        <input type="number" step="0.01" id="admin-labor"
-                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
-                    </div>
-                    <div>
-                        <label class="block font-mono text-xs text-gray-400 mb-1">LOGISTICS ($/mile)</label>
-                        <input type="number" step="0.01" id="admin-logistics"
-                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
-                    </div>
-                    <div>
-                        <label class="block font-mono text-xs text-gray-400 mb-1">TAX RATE (%)</label>
-                        <input type="number" step="0.1" id="admin-tax"
-                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block font-mono text-xs text-gray-400 mb-1">PROFIT MARGIN (%)</label>
-                        <input type="number" step="0.1" id="admin-margin"
-                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
+            <form id="admin-form" class="space-y-6">
+                <div>
+                    <h3 class="font-mono text-nothing text-sm border-b border-borderGray pb-2 mb-4">BASE MATERIAL RATES
+                        ($ / cu in)</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-1">A36 CARBON</label>
+                            <input type="number" step="0.01" id="admin-rate-carbon"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-1">304 STAINLESS</label>
+                            <input type="number" step="0.01" id="admin-rate-stainless"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-1">6061 ALUMINUM</label>
+                            <input type="number" step="0.01" id="admin-rate-aluminum"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm"
+                                required>
+                        </div>
                     </div>
                 </div>
+
+                <div>
+                    <h3 class="font-mono text-nothing text-sm border-b border-borderGray pb-2 mb-4">OPERATIONAL METRICS
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-1">LABOR COST ($/unit)</label>
+                            <input type="number" step="0.01" id="admin-labor"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-1">LOGISTICS ($/mile)</label>
+                            <input type="number" step="0.01" id="admin-logistics"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-1">TAX RATE (%)</label>
+                            <input type="number" step="0.1" id="admin-tax"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-gray-400 mb-1">PROFIT MARGIN (%)</label>
+                            <input type="number" step="0.1" id="admin-margin"
+                                class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm"
+                                required>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="pt-4 text-right">
                     <button type="submit"
                         class="font-mono px-4 py-2 border border-nothing text-nothing hover:bg-nothing hover:text-white rounded transition-colors text-sm">UPDATE
