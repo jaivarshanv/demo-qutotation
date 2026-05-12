@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Engine // OS</title>
+
+    <!-- Fonts: Inter (Body) & VT323 (Monospace/Retro) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=VT323&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        nothing: '#FF0031',
+                        darkbg: '#000000',
+                        glass: 'rgba(0, 0, 0, 0.5)',
+                        borderGray: '#1e1e1e'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['VT323', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- External Libraries (jsPDF & EmailJS) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col items-center justify-center relative">
+
+    <div class="bg-grain"></div>
+
+    <!-- Main Container -->
+    <main class="relative z-10 w-full max-w-3xl p-6">
+
+        <!-- Header -->
+        <header class="mb-10 flex justify-between items-center fade-enter fade-enter-active">
+            <h1 class="font-mono text-3xl tracking-widest text-white">SYS.<span class="text-nothing">QUOTE</span></h1>
+            <div id="user-badge" class="font-mono text-sm text-gray-500 hidden">Logged in as: <span
+                    id="user-email-display" class="text-gray-300"></span></div>
+        </header>
+
+        <!-- STEP 1: AUTHENTICATION -->
+        <section id="step-1" class="glass-panel rounded-2xl p-10 text-center transition-all duration-300">
+            <h2 class="font-mono text-2xl mb-4">AUTHENTICATION REQUIRED</h2>
+            <p class="text-gray-400 mb-8 font-light">Secure access to industrial pricing logic.</p>
+            <button id="btn-google-login"
+                class="px-6 py-3 border border-borderGray hover:border-nothing hover:text-nothing bg-black/50 rounded-lg transition-all duration-300 flex items-center justify-center mx-auto space-x-3">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        fill="#4285F4" />
+                    <path
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        fill="#34A853" />
+                    <path
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                        fill="#FBBC05" />
+                    <path
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        fill="#EA4335" />
+                </svg>
+                <span class="font-mono">INITIALIZE VIA GOOGLE</span>
+            </button>
+        </section>
+
+        <!-- STEP 2: CATEGORY SELECTION -->
+        <section id="step-2" class="hidden-step glass-panel rounded-2xl p-10 transition-all duration-300">
+            <h2 class="font-mono text-2xl mb-6 border-b border-borderGray pb-4">01. SELECT SECTOR</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button
+                    class="category-btn p-6 border border-borderGray rounded-xl text-left hover:border-nothing hover:bg-nothing/5 transition-all duration-300 group"
+                    data-category="Heavy Structural">
+                    <h3 class="font-mono text-xl group-hover:text-nothing transition-colors">HEAVY STRUCTURAL</h3>
+                    <p class="text-sm text-gray-500 mt-2 font-light">I-Beams, H-Piles, thick-walled tubing.</p>
+                </button>
+                <button
+                    class="category-btn p-6 border border-borderGray rounded-xl text-left hover:border-nothing hover:bg-nothing/5 transition-all duration-300 group"
+                    data-category="Industrial & Sanitary">
+                    <h3 class="font-mono text-xl group-hover:text-nothing transition-colors">INDUSTRIAL & SANITARY</h3>
+                    <p class="text-sm text-gray-500 mt-2 font-light">Stainless runs, high-pressure piping.</p>
+                </button>
+                <button
+                    class="category-btn p-6 border border-borderGray rounded-xl text-left hover:border-nothing hover:bg-nothing/5 transition-all duration-300 group"
+                    data-category="Residential">
+                    <h3 class="font-mono text-xl group-hover:text-nothing transition-colors">RESIDENTIAL</h3>
+                    <p class="text-sm text-gray-500 mt-2 font-light">Standard framing, HVAC sheet metal.</p>
+                </button>
+                <button
+                    class="category-btn p-6 border border-borderGray rounded-xl text-left hover:border-nothing hover:bg-nothing/5 transition-all duration-300 group"
+                    data-category="Agriculture">
+                    <h3 class="font-mono text-xl group-hover:text-nothing transition-colors">AGRICULTURE</h3>
+                    <p class="text-sm text-gray-500 mt-2 font-light">Corrugated panels, fencing materials.</p>
+                </button>
+            </div>
+        </section>
+
+        <!-- STEP 3: REQUIREMENTS -->
+        <section id="step-3" class="hidden-step glass-panel rounded-2xl p-10 transition-all duration-300">
+            <h2 class="font-mono text-2xl mb-6 border-b border-borderGray pb-4">02. DIMENSIONS & MATERIAL</h2>
+            <form id="requirements-form" class="space-y-6">
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block font-mono text-sm text-gray-400 mb-2">LENGTH (IN)</label>
+                        <input type="number" id="input-length" required min="1"
+                            class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-sm text-gray-400 mb-2">WIDTH (IN)</label>
+                        <input type="number" id="input-width" required min="1"
+                            class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-sm text-gray-400 mb-2">THICKNESS (IN)</label>
+                        <input type="number" step="0.1" id="input-thickness" required min="0.1"
+                            class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-mono text-sm text-gray-400 mb-2">MATERIAL GRADE</label>
+                    <select id="input-material" required
+                        class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all appearance-none">
+                        <option value="A36_Carbon">A36 Carbon Steel</option>
+                        <option value="304_Stainless">304 Stainless Steel</option>
+                        <option value="6061_Aluminum">6061-T6 Aluminum</option>
+                    </select>
+                </div>
+                <div class="pt-4 text-right">
+                    <button type="submit"
+                        class="font-mono px-6 py-2 bg-white text-black hover:bg-nothing hover:text-white rounded transition-colors">NEXT:
+                        LOGISTICS -></button>
+                </div>
+            </form>
+        </section>
+
+        <!-- STEP 4: GEOLOCATION -->
+        <section id="step-4" class="hidden-step glass-panel rounded-2xl p-10 transition-all duration-300">
+            <h2 class="font-mono text-2xl mb-6 border-b border-borderGray pb-4">03. LOGISTICS ROUTING</h2>
+            <p class="text-gray-400 font-light mb-6">Origin Plant: Lancaster, SC (34.7203, -80.7709)</p>
+
+            <div class="text-center py-8 border border-dashed border-borderGray rounded-xl mb-6">
+                <button id="btn-geolocate"
+                    class="font-mono px-6 py-3 border border-nothing text-nothing hover:bg-nothing hover:text-white rounded transition-all flex items-center justify-center mx-auto space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span>PINPOINT DELIVERY SITE</span>
+                </button>
+                <div id="distance-output" class="mt-6 font-mono text-xl text-white hidden">
+                    DISTANCE: <span id="calc-miles" class="text-nothing text-2xl">0</span> MILES
+                </div>
+            </div>
+
+            <div class="text-right">
+                <button id="btn-step4-next"
+                    class="hidden font-mono px-6 py-2 bg-white text-black hover:bg-nothing hover:text-white rounded transition-colors">GENERATE
+                    QUOTE -></button>
+            </div>
+        </section>
+
+        <!-- STEP 5: REVIEW & GENERATE -->
+        <section id="step-5" class="hidden-step glass-panel rounded-2xl p-10 transition-all duration-300">
+            <h2 class="font-mono text-2xl mb-6 border-b border-borderGray pb-4 text-nothing">04. FINAL CALCULATION</h2>
+
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="font-mono text-gray-500 mb-3">INPUT PARAMETERS</h3>
+                    <ul class="font-mono text-sm space-y-2 text-gray-300">
+                        <li>SECTOR: <span id="out-sector" class="text-white"></span></li>
+                        <li>VOLUME: <span id="out-volume" class="text-white"></span> cu in</li>
+                        <li>MATERIAL: <span id="out-material" class="text-white"></span></li>
+                        <li>DISTANCE: <span id="out-distance" class="text-white"></span> mi</li>
+                    </ul>
+                </div>
+                <div class="bg-neutral-900 border border-borderGray p-4 rounded-xl">
+                    <h3 class="font-mono text-gray-500 mb-3 border-b border-borderGray pb-2">COST BREAKDOWN</h3>
+                    <div class="flex justify-between font-mono text-sm mb-1"><span>Base Material:</span> <span
+                            id="cost-base">$0.00</span></div>
+                    <div class="flex justify-between font-mono text-sm mb-1"><span>Labor/Processing:</span> <span
+                            id="cost-labor">$0.00</span></div>
+                    <div class="flex justify-between font-mono text-sm mb-1"><span>Logistics:</span> <span
+                            id="cost-logistics">$0.00</span></div>
+                    <div class="flex justify-between font-mono text-sm mb-3 text-gray-500"><span>Tax/Margin:</span>
+                        <span id="cost-fees">$0.00</span>
+                    </div>
+                    <div
+                        class="flex justify-between font-mono text-xl text-nothing border-t border-borderGray pt-2 mt-2">
+                        <span>TOTAL:</span> <span id="cost-total">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block font-mono text-sm text-gray-400 mb-2">SEND MANIFEST TO:</label>
+                <input type="email" id="input-final-email"
+                    class="w-full bg-neutral-900 border border-borderGray rounded-lg p-3 text-white focus:outline-none focus:border-nothing focus:ring-1 focus:ring-nothing transition-all">
+            </div>
+
+            <button id="btn-finalize"
+                class="w-full font-mono text-lg py-4 bg-white text-black hover:bg-nothing hover:text-white rounded transition-colors uppercase tracking-wider font-bold">
+                Finalize & Dispatch Quote
+            </button>
+        </section>
+
+        <!-- ADMIN DASHBOARD (HIDDEN) -->
+        <section id="admin-view"
+            class="hidden-step glass-panel rounded-2xl p-10 border-nothing/50 transition-all duration-300 mt-10">
+            <div class="flex justify-between items-center mb-6 border-b border-borderGray pb-4">
+                <h2 class="font-mono text-2xl text-nothing">ADMIN // SUPERSET</h2>
+                <span class="font-mono text-xs text-gray-500 animate-pulse">● LIVE SYNC ACTIVE</span>
+            </div>
+
+            <form id="admin-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-mono text-xs text-gray-400 mb-1">MARKET RATE ($/cu in)</label>
+                        <input type="number" step="0.01" id="admin-market"
+                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-xs text-gray-400 mb-1">LABOR COST ($/unit)</label>
+                        <input type="number" step="0.01" id="admin-labor"
+                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-xs text-gray-400 mb-1">LOGISTICS ($/mile)</label>
+                        <input type="number" step="0.01" id="admin-logistics"
+                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-xs text-gray-400 mb-1">TAX RATE (%)</label>
+                        <input type="number" step="0.1" id="admin-tax"
+                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block font-mono text-xs text-gray-400 mb-1">PROFIT MARGIN (%)</label>
+                        <input type="number" step="0.1" id="admin-margin"
+                            class="w-full bg-neutral-900 border border-borderGray rounded p-2 text-white font-mono text-sm">
+                    </div>
+                </div>
+                <div class="pt-4 text-right">
+                    <button type="submit"
+                        class="font-mono px-4 py-2 border border-nothing text-nothing hover:bg-nothing hover:text-white rounded transition-colors text-sm">UPDATE
+                        SYSTEM VARIABLES</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Footer / Admin Trigger -->
+        <footer class="mt-12 text-center">
+            <p class="font-mono text-xs text-gray-600">
+                SYS.BUILD.402 // <span id="admin-trigger"
+                    class="cursor-pointer hover:text-white transition-colors">v1.0.0</span>
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- Main JavaScript Logic -->
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
